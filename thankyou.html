@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Thank You Portal - Role Select Edition</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 1rem;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #e0f2ff, #b3d8ff);
+    color: #1a1a1a;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center;
+  }
+  header {
+    width: 100%;
+    background: #005bbb;
+    color: white;
+    padding: 1.5rem 0;
+    text-align: center;
+    font-weight: 700;
+    font-size: 2.2rem;
+    letter-spacing: 1.2px;
+    user-select: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  main {
+    background: white;
+    max-width: 900px;
+    width: 100%;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgb(0 0 0 / 0.12);
+    padding: 2rem 2.5rem;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+  }
+  h2, h3 {
+    color: #004080;
+    margin-bottom: 0.6rem;
+  }
+  #roleSelectSection {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  button.roleBtn {
+    background: #005bbb;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+    user-select: none;
+  }
+  button.roleBtn:hover {
+    background: #004080;
+  }
+  /* Login form */
+  #loginSection {
+    max-width: 400px;
+    margin: 0 auto;
+    background: #f0faff;
+    border: 1px solid #90c4ff;
+    border-radius: 10px;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 3px 10px rgb(0 83 179 / 0.3);
+    transition: box-shadow 0.3s ease;
+  }
+  #loginSection:hover {
+    box-shadow: 0 6px 16px rgb(0 83 179 / 0.5);
+  }
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    margin-top: 0.8rem;
+    border: 2px solid #6eb0ff;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  input[type="text"]:focus, input[type="password"]:focus {
+    outline: none;
+    border-color: #004aad;
+    background: #e6f0ff;
+  }
+  button#loginBtn {
+    margin-top: 1.3rem;
+    width: 100%;
+    padding: 0.85rem;
+    border: none;
+    border-radius: 8px;
+    background: #005bbb;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  button#loginBtn:hover:not(:disabled) {
+    background: #004080;
+  }
+  button#loginBtn:disabled {
+    background: #b0b0b0;
+    cursor: default;
+  }
+  /* User info & warnings */
+  #userSection {
+    text-align: center;
+  }
+  #userSection p {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  #warnMessage {
+    margin-top: 0.7rem;
+    color: #b22222;
+    font-weight: 700;
+    user-select: none;
+  }
+  #banWarning {
+    margin-top: 1rem;
+    font-weight: 700;
+    color: white;
+    background: #b22222;
+    border-radius: 8px;
+    padding: 0.7rem;
+  }
+  /* Post section */
+  #postSection {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-size: 1rem;
+    padding: 0.7rem;
+    border-radius: 8px;
+    border: 2px solid #90baff;
+    transition: border-color 0.3s ease;
+  }
+  textarea:focus {
+    outline: none;
+    border-color: #005bbb;
+    background: #e6f0ff;
+  }
+  input[type="url"] {
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 2px solid #90baff;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  input[type="url"]:focus {
+    outline: none;
+    border-color: #005bbb;
+    background: #e6f0ff;
+  }
+  /* Messages */
+  #messages {
+    max-height: 450px;
+    overflow-y: auto;
+    border: 2px solid #d0e4ff;
+    border-radius: 12px;
+    padding: 1rem;
+    background: #f9fbff;
+  }
+  .message {
+    border-bottom: 1px solid #d9e8ff;
+    padding: 0.7rem 0;
+    user-select: none;
+  }
+  .message:last-child {
+    border-bottom: none;
+  }
+  .message strong {
+    color: #004080;
+  }
+  .message .role {
+    font-style: italic;
+    font-size: 0.9rem;
+    color: #666;
+    margin-left: 0.4rem;
+  }
+  .message img {
+    margin-top: 0.5rem;
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 3px 6px rgb(0 0 0 / 0.12);
+  }
+  /* Admin controls */
+  .admin-controls {
+    margin-top: 0.4rem;
+  }
+  .admin-controls button {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;
+    margin-right: 0.5rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .admin-controls button:hover {
+    background-color: #004080;
+    color: white;
+  }
+  /* User list for admin */
+  #adminSection {
+    margin-top: 2rem;
+  }
+  #userList div {
+    padding: 0.6rem 0.3rem;
+    border-bottom: 1px solid #e0eaff;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+  #userList div:last-child {
+    border-bottom: none;
+  }
+  #userList strong {
+    color: #005bbb;
+    font-weight: 600;
+  }
+  #userList button {
+    margin-left: 0.3rem;
+  }
+  /* Online users */
+  #onlineUsers {
+    margin-top: 1rem;
+    font-style: italic;
+    color: #004080;
+    user-select: none;
+  }
+  /* Logout button */
+  #logoutBtn {
+    margin-top: 0.6rem;
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    background: #005bbb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  #logoutBtn:hover {
+    background: #003f7f;
+  }
+  /* Responsive */
+  @media (max-width: 480px) {
+    main {
+      padding: 1rem 1.2rem;
+      margin: 1rem;
+    }
+    #loginSection {
+      padding: 1rem 1.2rem;
+    }
+    button.roleBtn {
+      flex: 1 1 100%;
+    }
+  }
+</style>
+</head>
+<body>
+<header>Thank You Portal</header>
+
+<main>
+  <!-- Role selection -->
+  <section id="roleSelectSection" aria-label="Select your role">
+    <button class="roleBtn" id="selectTeacher">I am a Teacher (View only)</button>
+    <button class="roleBtn" id="selectStudent">I am a Student (Login required)</button>
+    <button class="roleBtn" id="selectAdmin">Admin Login</button>
+  </section>
+
+  <!-- Login section -->
+  <section id="loginSection" class="hidden" aria-label="Login form">
+    <h2>Login</h2>
+    <input id="usernameInput" placeholder="Username" autocomplete="off" />
+    <input id="passwordInput" type="password" placeholder="Password" autocomplete="off" />
+    <button id="loginBtn">Login</button>
+    <p id="loginError" style="color:#b22222; user-select:none; margin-top: 0.5rem;"></p>
+  </section>
+
+  <!-- Logged in user info -->
+  <section id="userSection" class="hidden" aria-live="polite" aria-atomic="true">
+    <p>Welcome, <strong id="userName"></strong> (<span id="userRole"></span>)</p>
+    <button id="logoutBtn">Logout</button>
+    <div id="banWarning" class="warn hidden" aria-live="assertive" role="alert">You are banned and cannot post or login.</div>
+    <div id="warnMessage" class="warn" style="display:none; margin-top:0.6rem;" aria-live="assertive"></div>
+    <div id="onlineUsers"></div>
+  </section>
+
+  <!-- Post messages (students & admins only) -->
+  <section id="postSection" class="hidden" aria-label="Post thank you message">
+    <h3>Post a Thank You Message</h3>
+    <textarea id="messageInput" placeholder="Write your thank you message here..." aria-label="Thank you message"></textarea>
+    <input id="imageUrlInput" type="url" placeholder="Optional image URL (e.g. https://example.com/pic.jpg)" aria-label="Image URL" />
+    <button id="postBtn">Post Message</button>
+  </section>
+
+  <!-- Messages -->
+  <section aria-label="All thank you messages">
+    <h3>All Messages</h3>
+    <div id="messages" tabindex="0"></div>
+  </section>
+
+  <!-- Admin Panel -->
+  <section id="adminSection" class="hidden" aria-label="Admin user management">
+    <h3>Admin Panel — User Management</h3>
+    <div id="userList" role="list"></div>
+  </section>
+</main>
+
+<footer>
+  Developed by Muhammad Ahmad
+</footer>
+
+<script>
+(() => {
+  // JSONBin credentials - replace with your own
+  const BIN_ID = "6863fa078561e97a502fb26c";
+  const WRITE_KEY = "$2a$10$4EX1ZT6TPAE1x4NBUFgmt.Qvwek6Ognuqf1kNZ.Y8IjLfKf2i0GUG";
+  const READ_KEY = WRITE_KEY;
+
+  // Users: username => {pw, role, banned, warning}
+  const users = {
+    "admin": { pw: "AdminPass123!", role: "admin", banned: false, warning: "" },
+    "supervisor": { pw: "SuperSecure1", role: "admin", banned: false, warning: "" },
+    "assistant_supervisor": { pw: "Principal99", role: "admin", banned: false, warning: "" },
+    "assistant_moderator": { pw: "HeadMasterX7", role: "admin", banned: false, warning: "" },
+    "moderator": { pw: "Mod2025$", role: "admin", banned: false, warning: "" },
+
+    "user01": { pw: "pAssw0rd01", role: "student", banned: false, warning: "" },
+    "user02": { pw: "pAssw0rd02", role: "student", banned: false, warning: "" },
+    "user03": { pw: "pAssw0rd03", role: "student", banned: false, warning: "" },
+    "user04": { pw: "pAssw0rd04", role: "student", banned: false, warning: "" },
+    "user05": { pw: "pAssw0rd05", role: "student", banned: false, warning: "" },
+    "user06": { pw: "pAssw0rd06", role: "student", banned: false, warning: "" },
+    "user07": { pw: "pAssw0rd07", role: "student", banned: false, warning: "" },
+    "user08": { pw: "pAssw0rd08", role: "student", banned: false, warning: "" },
+    "user09": { pw: "pAssw0rd09", role: "student", banned: false, warning: "" },
+    "user10": { pw: "pAssw0rd10", role: "student", banned: false, warning: "" },
+  };
+
+  let messages = [];
+  let currentUser = null;
+  let roleSelected = null; // "teacher", "student", "admin"
+
+  // UI Elements
+  const roleSelectSection = document.getElementById("roleSelectSection");
+  const loginSection = document.getElementById("loginSection");
+  const userSection = document.getElementById("userSection");
+  const postSection = document.getElementById("postSection");
+  const adminSection = document.getElementById("adminSection");
+  const messagesDiv = document.getElementById("messages");
+  const loginError = document.getElementById("loginError");
+  const banWarning = document.getElementById("banWarning");
+  const warnMessage = document.getElementById("warnMessage");
+  const onlineUsersDiv = document.getElementById("onlineUsers");
+
+  // Role buttons
+  document.getElementById("selectTeacher").onclick = () => selectRole("teacher");
+  document.getElementById("selectStudent").onclick = () => selectRole("student");
+  document.getElementById("selectAdmin").onclick = () => selectRole("admin");
+
+  // Login button
+  document.getElementById("loginBtn").onclick = () => login();
+
+  // Logout button
+  document.getElementById("logoutBtn").onclick = () => logout();
+
+  // Post message button
+  document.getElementById("postBtn").onclick = () => postMessage();
+
+  // Select role function
+  function selectRole(role) {
+    roleSelected = role;
+    roleSelectSection.style.display = "none";
+    loginError.textContent = "";
+    banWarning.classList.add("hidden");
+    warnMessage.style.display = "none";
+
+    if (role === "teacher") {
+      // Teachers: no login, view only
+      loginSection.style.display = "none";
+      userSection.style.display = "none";
+      postSection.style.display = "none";
+      adminSection.style.display = "none";
+      renderMessages();
+    } else {
+      // Students and Admins must login
+      loginSection.style.display = "block";
+      userSection.style.display = "none";
+      postSection.style.display = "none";
+      adminSection.style.display = "none";
+    }
+  }
+
+  // Login function
+  function login() {
+    const username = document.getElementById("usernameInput").value.trim();
+    const password = document.getElementById("passwordInput").value;
+
+    if (!username || !password) {
+      loginError.textContent = "Please enter both username and password.";
+      return;
+    }
+
+    if (!(username in users)) {
+      loginError.textContent = "Invalid username or password.";
+      return;
+    }
+
+    const user = users[username];
+    if (user.pw !== password) {
+      loginError.textContent = "Invalid username or password.";
+      return;
+    }
+
+    if (user.banned) {
+      banWarning.classList.remove("hidden");
+      loginError.textContent = "You are banned and cannot post or login.";
+      return;
+    } else {
+      banWarning.classList.add("hidden");
+      loginError.textContent = "";
+    }
+
+    if (
+      (roleSelected === "student" && user.role !== "student") ||
+      (roleSelected === "admin" && user.role !== "admin")
+    ) {
+      loginError.textContent = "You do not have permission to login here.";
+      return;
+    }
+
+    currentUser = { name: username, role: user.role };
+    loginSection.style.display = "none";
+    userSection.style.display = "block";
+    postSection.style.display = "block";
+    renderUserInfo();
+    renderMessages();
+    if (currentUser.role === "admin") {
+      adminSection.style.display = "block";
+      renderUserList();
+    } else {
+      adminSection.style.display = "none";
+    }
+  }
+
+  // Logout function
+  function logout() {
+    currentUser = null;
+    loginSection.style.display = "none";
+    userSection.style.display = "none";
+    postSection.style.display = "none";
+    adminSection.style.display = "none";
+    roleSelectSection.style.display = "flex";
+    loginError.textContent = "";
+    document.getElementById("usernameInput").value = "";
+    document.getElementById("passwordInput").value = "";
+    banWarning.classList.add("hidden");
+    warnMessage.style.display = "none";
+  }
+
+  // Render logged-in user info
+  function renderUserInfo() {
+    if (!currentUser) return;
+    document.getElementById("userName").textContent = currentUser.name;
+    document.getElementById("userRole").textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+
+    // Show warning message if any
+    const warn = users[currentUser.name].warning;
+    if (warn && warn.trim()) {
+      warnMessage.textContent = "⚠️ Warning: " + warn;
+      warnMessage.style.display = "block";
+    } else {
+      warnMessage.style.display = "none";
+    }
+  }
+
+  // Post a new message
+  async function postMessage() {
+    if (!currentUser) {
+      alert("Please login first.");
+      return;
+    }
+
+    if (users[currentUser.name].banned) {
+      alert("You are banned and cannot post.");
+      return;
+    }
+
+    const text = document.getElementById("messageInput").value.trim();
+    const image = document.getElementById("imageUrlInput").value.trim();
+
+    if (!text && !image) {
+      alert("Please enter a message or image URL.");
+      return;
+    }
+
+    messages.unshift({
+      user: currentUser.name,
+      role: currentUser.role,
+      text,
+      image,
+      timestamp: Date.now()
+    });
+
+    document.getElementById("messageInput").value = "";
+    document.getElementById("imageUrlInput").value = "";
+
+    await saveData();
+    renderMessages();
+  }
+
+  // Render all messages
+  function renderMessages() {
+    messagesDiv.innerHTML = "";
+    if (messages.length === 0) {
+      messagesDiv.innerHTML = "<p>No messages yet.</p>";
+      return;
+    }
+    messages.forEach((msg, idx) => {
+      const div = document.createElement("div");
+      div.className = "message";
+
+      const timeStr = new Date(msg.timestamp).toLocaleString();
+
+      div.innerHTML = `
+        <strong>${escapeHTML(msg.user)}</strong>
+        <span class="role">[${escapeHTML(msg.role)}]</span> 
+        <span style="float:right; font-size:0.85rem; color:#999;">${timeStr}</span>
+        <p>${escapeHTML(msg.text)}</p>
+        ${msg.image ? `<img src="${escapeHTML(msg.image)}" alt="User uploaded image" loading="lazy">` : ""}
+      `;
+
+      // Admin controls on messages
+      if (currentUser && currentUser.role === "admin") {
+        const adminControls = document.createElement("div");
+        adminControls.className = "admin-controls";
+
+        // Delete message button
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "Delete";
+        delBtn.title = "Delete this message";
+        delBtn.onclick = async () => {
+          if (confirm("Delete this message?")) {
+            messages.splice(idx, 1);
+            await saveData();
+            renderMessages();
+          }
+        };
+        adminControls.appendChild(delBtn);
+
+        div.appendChild(adminControls);
+      }
+
+      messagesDiv.appendChild(div);
+    });
+  }
+
+  // Render user list for admin panel
+  function renderUserList() {
+    const ul = document.getElementById("userList");
+    ul.innerHTML = "";
+
+    Object.entries(users).forEach(([username, info]) => {
+      const div = document.createElement("div");
+      const bannedText = info.banned ? " (BANNED)" : "";
+      const warningText = info.warning ? ` ⚠️${info.warning}` : "";
+
+      div.innerHTML = `<strong>${escapeHTML(username)}</strong> (${escapeHTML(info.role)})${bannedText}${warningText}`;
+
+      if (currentUser && currentUser.role === "admin") {
+        // Ban/unban button
+        const banBtn = document.createElement("button");
+        banBtn.textContent = info.banned ? "Unban" : "Ban";
+        banBtn.title = info.banned ? "Unban this user" : "Ban this user";
+        banBtn.onclick = async () => {
+          if (username === currentUser.name) {
+            alert("You cannot ban yourself!");
+            return;
+          }
+          users[username].banned = !users[username].banned;
+          await saveData();
+          renderUserList();
+          if (username === currentUser.name) logout();
+        };
+        div.appendChild(banBtn);
+
+        // Warn button
+        const warnBtn = document.createElement("button");
+        warnBtn.textContent = "Warn";
+        warnBtn.title = "Send or clear warning message";
+        warnBtn.onclick = async () => {
+          const msg = prompt("Enter warning message (leave empty to clear):", info.warning || "");
+          users[username].warning = msg ? msg.trim() : "";
+          await saveData();
+          renderUserList();
+          if (username === currentUser.name) renderUserInfo();
+        };
+        div.appendChild(warnBtn);
+
+        // Reset password button
+        const resetBtn = document.createElement("button");
+        resetBtn.textContent = "Reset PW";
+        resetBtn.title = "Reset user's password";
+        resetBtn.onclick = async () => {
+          const newpw = prompt(`Enter new password for ${username}:`, "");
+          if (newpw && newpw.trim() !== "") {
+            users[username].pw = newpw.trim();
+            await saveData();
+            alert("Password reset!");
+            if (username === currentUser.name) logout();
+          }
+        };
+        div.appendChild(resetBtn);
+      }
+
+      ul.appendChild(div);
+    });
+  }
+
+  // Escape HTML utility to prevent XSS
+  function escapeHTML(str) {
+    if (!str) return "";
+    return str.replace(/[&<>"']/g, function(m) {
+      return {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[m];
+    });
+  }
+
+  // Save data to JSONBin
+  async function saveData() {
+    try {
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Master-Key": WRITE_KEY,
+          "X-Bin-Versioning": false
+        },
+        body: JSON.stringify({ messages, users })
+      });
+      if (!res.ok) throw new Error("Failed to save data");
+    } catch (e) {
+      alert("Error saving data. Check your connection.");
+      console.error(e);
+    }
+  }
+
+  // Load data from JSONBin
+  async function loadData() {
+    try {
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: { "X-Master-Key": READ_KEY }
+      });
+      if (!res.ok) throw new Error("Failed to load data");
+      const data = await res.json();
+      if (data.record) {
+        messages = data.record.messages || [];
+        if (data.record.users) {
+          // Merge server users with local users (so you keep initial users and updates like ban/warn)
+          for (const [k, v] of Object.entries(data.record.users)) {
+            users[k] = v;
+          }
+        }
+      }
+      renderMessages();
+    } catch (e) {
+      console.warn("Could not load data from JSONBin, using local defaults.");
+      renderMessages();
+    }
+  }
+
+  // Initialize app
+  function init() {
+    roleSelectSection.style.display = "flex";
+    loginSection.style.display = "none";
+    userSection.style.display = "none";
+    postSection.style.display = "none";
+    adminSection.style.display = "none";
+    banWarning.classList.add("hidden");
+    warnMessage.style.display = "none";
+
+    loadData();
+  }
+
+  // On page load
+  window.onload = init;
+
+})();
+</script>
+</body>
+</html>
