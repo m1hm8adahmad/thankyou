@@ -542,13 +542,13 @@
 
       const timeStr = new Date(msg.timestamp).toLocaleString();
 
-      div.innerHTML = 
+      div.innerHTML = `
         <strong>${escapeHTML(msg.user)}</strong>
         <span class="role">[${escapeHTML(msg.role)}]</span> 
         <span style="float:right; font-size:0.85rem; color:#999;">${timeStr}</span>
         <p>${escapeHTML(msg.text)}</p>
-        ${msg.image ? <img src="${escapeHTML(msg.image)}" alt="User uploaded image" loading="lazy"> : ""}
-      ;
+        ${msg.image ? `<img src="${escapeHTML(msg.image)}" alt="User uploaded image" loading="lazy">` : ""}
+      `;
 
       // Admin controls on messages
       if (currentUser && currentUser.role === "admin") {
@@ -583,9 +583,9 @@
     Object.entries(users).forEach(([username, info]) => {
       const div = document.createElement("div");
       const bannedText = info.banned ? " (BANNED)" : "";
-      const warningText = info.warning ?  ⚠️${info.warning} : "";
+      const warningText = info.warning ? ` ⚠️${info.warning}` : "";
 
-      div.innerHTML = <strong>${escapeHTML(username)}</strong> (${escapeHTML(info.role)})${bannedText}${warningText};
+      div.innerHTML = `<strong>${escapeHTML(username)}</strong> (${escapeHTML(info.role)})${bannedText}${warningText}`;
 
       if (currentUser && currentUser.role === "admin") {
         // Ban/unban button
@@ -622,7 +622,7 @@
         resetBtn.textContent = "Reset PW";
         resetBtn.title = "Reset user's password";
         resetBtn.onclick = async () => {
-          const newpw = prompt(Enter new password for ${username}:, "");
+          const newpw = prompt(`Enter new password for ${username}:`, "");
           if (newpw && newpw.trim() !== "") {
             users[username].pw = newpw.trim();
             await saveData();
@@ -654,7 +654,7 @@
   // Save data to JSONBin
   async function saveData() {
     try {
-      const res = await fetch(https://api.jsonbin.io/v3/b/${BIN_ID}, {
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -673,7 +673,7 @@
   // Load data from JSONBin
   async function loadData() {
     try {
-      const res = await fetch(https://api.jsonbin.io/v3/b/${BIN_ID}/latest, {
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
         headers: { "X-Master-Key": READ_KEY }
       });
       if (!res.ok) throw new Error("Failed to load data");
@@ -713,6 +713,4 @@
 })();
 </script>
 </body>
-</html>
-
-
+</html
